@@ -27,3 +27,9 @@ This script implements this functionality by utilizing the Google Cloud DNS API.
 ## License ##
 
 This small script is licensed with the [MIT license](LICENSE).
+
+## How to use ##
+
+There is an example configuration file to run the 
+[application on Kubernetes](kube/deployment.yaml). The docker image is also publicly available on
+[docker hub](https://hub.docker.com/r/xcnt/cname-record-setter).
