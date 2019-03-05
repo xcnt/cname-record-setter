@@ -30,5 +30,6 @@ dockerBuildRuntime(label: label) {
 
     stage('Publish') {
       publishImage(image, env.BRANCH_NAME, myRepo.GIT_COMMIT)
+      publishImageToPublicDocker(image, env.BRANCH_NAME, myRepo.GIT_COMMIT)
     }
 }

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: cname-record-setter
-        image:  eu.gcr.io/xcnt-infrastructure/cname-record-setter:develop
+        image:  xcnt/cname-record-setter:develop
         imagePullPolicy: Always
         env:
         - name: CNAME_RECORD_SETTER_SET_RECORD
