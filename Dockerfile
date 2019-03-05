@@ -13,6 +13,5 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev python3-dev linux-head
 ADD . /opt/app
 
 USER 9000
-EXPOSE 8080
 
 CMD [ "python", "cname_record_setter.py" ]
