@@ -9,15 +9,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: devices
+      app: cname-record-setter
   template:
     metadata:
       labels:
-        app: devices
+        app: cname-record-setter
     spec:
       containers:
-      - name: devices
-        image:  eu.gcr.io/xcnt-infrastructure/sfp-devices:develop
+      - name: cname-record-setter
+        image:  eu.gcr.io/xcnt-infrastructure/cname-record-setter:develop
         imagePullPolicy: Always
         env:
         - name: CNAME_RECORD_SETTER_SET_RECORD

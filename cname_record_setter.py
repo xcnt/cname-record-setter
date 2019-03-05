@@ -78,7 +78,7 @@ class Observer:
         """
         Queries the server for the current dns records
         """
-        records, page_token = self.zone.list_resource_record_sets()
+        records = self.zone.list_resource_record_sets()
         for record in records:
             if record.record_type == "A" and record.name.strip('.') == self.set_record.strip('.'):
                 return sorted(record.rrdatas)
