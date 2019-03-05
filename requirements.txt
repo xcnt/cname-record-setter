@@ -2,3 +2,4 @@ python-dotenv
 click
 google-cloud-dns
 dnspython
+pycodestyle

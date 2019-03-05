@@ -20,3 +20,7 @@ DNS resolution. Thus, no sub domains would be checked.
 
 Some DNS provides supply unofficial ANAME records with a similar functionality, providing a transparent proxy of the DNS resolution.
 This script implements this functionality by utilizing the Google Cloud DNS API. 
+
+## License ##
+
+This small script is licensed with the [MIT license](LICENSE).
