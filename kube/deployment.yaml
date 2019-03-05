@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cname-record-setter
+  namespace: please-set
+  labels:
+    app: cname-record-setter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devices
+  template:
+    metadata:
+      labels:
+        app: devices
+    spec:
+      containers:
+      - name: devices
+        image:  eu.gcr.io/xcnt-infrastructure/sfp-devices:develop
+        imagePullPolicy: Always
+        env:
+        - name: CNAME_RECORD_SETTER_SET_RECORD
+          value: example.com
+        - name: CNAME_RECORD_SETTER_OBSERVED_RECORD
+          value: proxy-ssl.webflow.com
+        - name: CNAME_RECORD_SETTER_PROJECT_ID
+          value: xcnt-infrastructure
+        resources:
+          requests:
+            cpu: 1m
+            memory: 5Mi
+          limits:
+            cpu: 100m
+            memory: 256Mi
