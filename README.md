@@ -33,3 +33,5 @@ This small script is licensed with the [MIT license](LICENSE).
 There is an example configuration file to run the 
 [application on Kubernetes](kube/deployment.yaml). The docker image is also publicly available on
 [docker hub](https://hub.docker.com/r/xcnt/cname-record-setter).
+The `stable` tag refers to the latest build in the master branch. Otherwise all iamges
+are published with teh branch and the git commit id if a pin to a specific version is required.
