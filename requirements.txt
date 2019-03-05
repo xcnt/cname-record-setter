@@ -1,5 +1,4 @@
-python-dotenv
-click
-google-cloud-dns
-dnspython
-pycodestyle
+Click==7.0
+google-cloud-dns==0.29.2
+dnspython==1.16.0
+pycodestyle==2.5.0
