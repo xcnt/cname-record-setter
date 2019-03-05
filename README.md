@@ -1,8 +1,5 @@
 # CNAME Record Setter #
 
-Develop: [![Build Status](https://jenkins.dev.xcnt.io/buildStatus/icon?job=XCNT/cname-record-setter/develop)](https://jenkins.dev.xcnt.io/job/XCNT/cname-record-setter/develop)
-Master: [![Build Status](https://jenkins.dev.xcnt.io/buildStatus/icon?job=XCNT/cname-record-setter/develop)](https://jenkins.dev.xcnt.io/job/XCNT/cname-record-setter/master)
-
 This script scans for the DNS resolution of a specific A
 the returned IPs to sync with another A record on a google cloud
 DNS managed domain.
