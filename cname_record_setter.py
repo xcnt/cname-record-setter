@@ -5,10 +5,10 @@ from typing import List
 from google.cloud import dns
 from dns import resolver as dns_resolver
 from datetime import datetime
-from logging import getLogger
+import logging
 
 
-LOGGER = getLogger('cname_record_setter')
+LOGGER = logging.getLogger('cname_record_setter')
 
 
 def get_zone(client: dns.Client, record_candidate):
@@ -49,7 +49,7 @@ class Observer:
         target_ips = self.current_target_ips
         LOGGER.info('Changing ip addresses of target record from %s to %s' % (self.observed_set_ips, target_ips))
         changes = self.zone.changes()
-        record_set = self.zone.resource_record_set(self.set_record, 'A', 300, target_ips)
+        record_set = self.zone.resource_record_set(self.set_record_for_dns, 'A', 300, target_ips)
         changes.add_record_set(record_set)
         changes.create()
         while changes.status != 'done':
@@ -58,6 +58,10 @@ class Observer:
             changes.reload()
         self.observed_ips = target_ips
         self.last_observe_refresh = datetime.now()
+
+    @property
+    def set_record_for_dns(self):
+        return "%s." % (self.set_record.strip('.'))
 
     @property
     def observed_set_ips(self):
@@ -97,7 +101,9 @@ class Observer:
 @click.option('--set-record', help='The fqdn which should be observed')
 @click.option('--observed-record', help='The record which should be observerd to be set')
 @click.option('--project-id', help='The project id of the google project where the adjustable dns records are in')
-def cname_record_setter(set_record, observed_record, project_id):
+@click.option('--log-level', help='The log level for the logger', default='INFO')
+def cname_record_setter(set_record, observed_record, project_id, level):
+    logging.basicConfig(level=getattr(logging, level.upper()))
     client = dns.Client(project=project_id)
     zone = get_zone(client, set_record)
     Observer(zone, set_record, observed_record).observe_loop()
