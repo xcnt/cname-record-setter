@@ -102,8 +102,8 @@ class Observer:
 @click.option('--observed-record', help='The record which should be observerd to be set')
 @click.option('--project-id', help='The project id of the google project where the adjustable dns records are in')
 @click.option('--log-level', help='The log level for the logger', default='INFO')
-def cname_record_setter(set_record, observed_record, project_id, level):
-    logging.basicConfig(level=getattr(logging, level.upper()))
+def cname_record_setter(set_record, observed_record, project_id, log_level):
+    logging.basicConfig(level=getattr(logging, log_level.upper()))
     client = dns.Client(project=project_id)
     zone = get_zone(client, set_record)
     Observer(zone, set_record, observed_record).observe_loop()
