@@ -7,6 +7,7 @@ from dns import resolver as dns_resolver
 from datetime import datetime
 import logging
 
+from google.cloud.dns import ResourceRecordSet
 
 LOGGER = logging.getLogger('cname_record_setter')
 
@@ -29,6 +30,7 @@ def get_zone_candidate(client: dns.Client, record_candidate):
 class Observer:
     observed_ips: List[str] = []
     last_observe_refresh: datetime = None
+    current_record: ResourceRecordSet = None
 
     def __init__(self, zone: dns.ManagedZone, set_record: str, observed_record: str):
         self.zone = zone
@@ -49,7 +51,11 @@ class Observer:
         target_ips = self.current_target_ips
         LOGGER.info('Changing ip addresses of target record from %s to %s' % (self.observed_set_ips, target_ips))
         changes = self.zone.changes()
-        record_set = self.zone.resource_record_set(self.set_record_for_dns, 'A', 300, target_ips)
+        if self.current_record is None:
+            record_set = self.zone.resource_record_set(self.set_record_for_dns, 'A', 300, target_ips)
+        else:
+            record_set = self.current_record
+            record_set.rrdatas = target_ips
         changes.add_record_set(record_set)
         changes.create()
         while changes.status != 'done':
@@ -85,6 +91,7 @@ class Observer:
         records = self.zone.list_resource_record_sets()
         for record in records:
             if record.record_type == "A" and record.name.strip('.') == self.set_record.strip('.'):
+                self.current_record = record
                 return sorted(record.rrdatas)
         return []
 
