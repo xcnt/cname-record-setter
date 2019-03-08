@@ -51,17 +51,17 @@ class Observer:
         target_ips = self.current_target_ips
         LOGGER.info('Changing ip addresses of target record from %s to %s' % (self.observed_set_ips, target_ips))
         changes = self.zone.changes()
-        if self.current_record is None:
-            record_set = self.zone.resource_record_set(self.set_record_for_dns, 'A', 300, target_ips)
-        else:
-            record_set = self.current_record
-            record_set.rrdatas = target_ips
+        if self.current_record is not None:
+            changes.delete_record_set(self.current_record)
+            self.current_record = None
+        record_set = self.zone.resource_record_set(self.set_record_for_dns, 'A', 300, target_ips)
         changes.add_record_set(record_set)
         changes.create()
         while changes.status != 'done':
             LOGGER.debug("Waiting for google cloud dns to be in sync")
             time.sleep(1)
             changes.reload()
+        self.load_current_record()
         self.observed_ips = target_ips
         self.last_observe_refresh = datetime.now()
 
@@ -88,11 +88,15 @@ class Observer:
         """
         Queries the server for the current dns records
         """
+        return sorted(getattr(self.load_current_record(), 'rrdatas', []))
+
+    def load_current_record(self):
         records = self.zone.list_resource_record_sets()
         for record in records:
             if record.record_type == "A" and record.name.strip('.') == self.set_record.strip('.'):
                 self.current_record = record
-                return sorted(record.rrdatas)
+                return record
+        self.current_record = None
         return []
 
     @property
