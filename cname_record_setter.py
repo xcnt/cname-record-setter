@@ -108,7 +108,7 @@ class Observer:
         return sorted([str(answer) for answer in answers])
 
 
-@click.command('cname_record_etter')
+@click.command('cname_record_setter')
 @click.option('--set-record', help='The fqdn which should be observed')
 @click.option('--observed-record', help='The record which should be observerd to be set')
 @click.option('--project-id', help='The project id of the google project where the adjustable dns records are in')
